@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "chart.js": "^4.4.2",
+    "csv-parser": "^3.0.0",
+    "math.js": "^1.1.46",
+    "mathjs": "^12.4.1",
+    "svg-charts": "^1.0.3"
+  }
+}

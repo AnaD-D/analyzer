@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráfico de Línea</title>
+    <!-- Incluir la biblioteca Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.7.1/math.min.js"></script>
+    <style>
+        * {
+        box-sizing: border-box;
+        font-family: sans;}
+        canvas {
+            max-width: 850px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+   
+    <div id="resultados"></div>
+    <!-- Elemento canvas donde se renderizará el gráfico -->
+   
+    <canvas id="grafico"></canvas>
+
+    <script>
+        // Datos
+        const tiempos = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        const temperaturas = [20, 22, 25, 27, 30, 28, 26, 24, 22, 20, 18];
+
+        // Crear un contexto de gráfico
+        const ctx = document.getElementById('grafico').getContext('2d');
+
+        // Crear un nuevo gráfico de línea
+        const grafico = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: tiempos, // Etiquetas en el eje X
+                datasets: [{
+                    label: 'Temperatura', // Etiqueta de la serie de datos
+                    data: temperaturas, // Datos de la serie de datos
+                    borderColor: 'blue', // Color de la línea
+                    fill: false // No rellenar el área debajo de la línea
+                }]
+            },
+            options: {
+                responsive: true, // Hacer el gráfico responsive
+                maintainAspectRatio: false // Mantener el aspecto del gráfico
+            }
+        });
+    </script>
+    
+ 
+     <!-- Incluir PapaParse desde un CDN -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+ 
+     <!-- Incluir Math.js desde un CDN -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.7.1/math.min.js"></script>
+ 
+     <!-- Tu código JavaScript -->
+     <script>
+         const resultadosElement = document.getElementById('resultados');
+ 
+         // Array para almacenar los datos del archivo CSV
+         let datos = [];
+ 
+         // Leer el archivo CSV y cargar los datos en el array
+         fetch('datos.csv')
+             .then(response => response.text())
+             .then(data => {
+                 // Parsear el CSV
+                 datos = Papa.parse(data, { header: true }).data;
+ 
+                 console.log('Datos cargados correctamente:', datos);
+ 
+                 // Calcular la media de la temperatura
+                 const temperaturas = datos.map(dato => parseInt(dato.Temperatura));
+                 const mediaTemperatura = math.mean(temperaturas);
+ 
+                 // Calcular la mediana de la temperatura
+                 const medianaTemperatura = math.median(temperaturas);
+ 
+                 // Calcular el rango de la temperatura
+                 const rangoTemperatura = math.max(temperaturas) - math.min(temperaturas);
+ 
+                 // Calcular la desviación estándar de la temperatura
+                 const desviacionEstandarTemperatura = math.std(temperaturas);
+ 
+                 // Crear elementos HTML para mostrar los resultados
+                 const mediaElement = document.createElement('p');
+                 mediaElement.textContent = 'Media: ' + mediaTemperatura;
+ 
+                 const medianaElement = document.createElement('p');
+                 medianaElement.textContent = 'Mediana: ' + medianaTemperatura;
+ 
+                 const desviacionElement = document.createElement('p');
+                 desviacionElement.textContent = 'Desviación Estándar: ' + desviacionEstandarTemperatura;
+ 
+                 const rangoElement = document.createElement('p');
+                 rangoElement.textContent = 'Rango: ' + rangoTemperatura;
+ 
+                 // Agregar los elementos al contenedor de resultados en el HTML
+                 resultadosElement.appendChild(mediaElement);
+                 resultadosElement.appendChild(medianaElement);
+                 resultadosElement.appendChild(desviacionElement);
+                 resultadosElement.appendChild(rangoElement);
+             });
+     </script>
+</body>
+</html>
